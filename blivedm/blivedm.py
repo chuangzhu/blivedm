@@ -58,7 +58,7 @@ class InitError(Exception):
 
 class DanmakuMessage:
     def __init__(self, mode, font_size, color, timestamp, rnd, uid_crc32, msg_type, bubble,
-                 msg,
+                 msg, emoticon,
                  uid, uname, admin, vip, svip, urank, mobile_verify, uname_color,
                  medal_level, medal_name, runame, room_id, mcolor, special_medal,
                  user_level, ulevel_color, ulevel_rank,
@@ -75,6 +75,7 @@ class DanmakuMessage:
         :param bubble: 右侧评论栏气泡
 
         :param msg: 弹幕内容
+        :param emoticon: 弹幕表情
 
         :param uid: 用户ID
         :param uname: 用户名
@@ -111,6 +112,7 @@ class DanmakuMessage:
         self.bubble = bubble
 
         self.msg = msg
+        self.emoticon = emoticon
 
         self.uid = uid
         self.uname = uname
@@ -139,9 +141,10 @@ class DanmakuMessage:
 
     @classmethod
     def from_command(cls, info: dict):
+        emoticon = info[0][13].get('url') if type(info[0][13]) == dict else None
         return cls(
             info[0][1], info[0][2], info[0][3], info[0][4], info[0][5], info[0][7], info[0][9], info[0][10],
-            info[1],
+            info[1], emoticon,
             *info[2][:8],
             *(info[3][:6] or (0, '', '', 0, 0, 0)),
             info[4][0], info[4][2], info[4][3],
